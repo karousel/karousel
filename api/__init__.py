@@ -34,7 +34,9 @@ api = Api(app)
 
 from authentication import Authenticate, AuthenticatedResource
 from user import UserInstance, UsersResource
+from collection import CollectionsResource
 
 api.add_resource(UserInstance, '/users/<string:id>/')
 api.add_resource(UsersResource, '/users/')
+api.add_resource(CollectionsResource, '/collections/')
 api.add_resource(Authenticate, '/authenticate/')
