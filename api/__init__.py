@@ -14,6 +14,15 @@ from photo import PhotoModel
 
 database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel], True)
 
+if UserModel.select().count() == 0:
+
+	  UserModel.create(
+	      admin = True,
+	      name = 'Admin',
+	      username = 'Admin',
+	      password = '$2a$12$pMtKl1b7h1sFKbMdBvPqbuza1tJN2ZNNAFMEs1RQmwqYTbBwrrKpy'
+    )
+
 from boto.s3.connection import S3Connection
 s3 = S3Connection(config.get('S3', 'AccessKey'), config.get('S3', 'SecretKey'))
 
