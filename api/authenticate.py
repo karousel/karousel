@@ -1,19 +1,8 @@
-from peewee import *
 from flask import request, abort
 from flask.ext.restful import Resource
 import bcrypt
-from . import database, UserModel
 import random
 import string
-
-class Token (Model):
-
-    token = CharField()
-    user = IntegerField()
-
-    class Meta:
-
-        database = database
 
 class Authenticate (Resource):
 
@@ -25,18 +14,18 @@ class Authenticate (Resource):
         def verify (username, password):
 
             try:
-              
+
                 user = UserModel.get(UserModel.username == username)
                 computed = user.password.encode('utf-8')
 
                 if bcrypt.hashpw(password, computed) == computed:
 
                     return True
-            
+
             except Exception:
 
                 pass
-              
+
             return False
 
         if not username or not password or not verify(username, password):

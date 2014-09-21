@@ -7,11 +7,13 @@ config.read('server.conf')
 
 database = SqliteDatabase('gallery.db', threadlocals=True)
 
-from collection import CollectionModel
-from album import AlbumModel
-from user import UserModel, UserInstance, UsersResource
-from photo import PhotoModel
-from authenticate import Token, Authenticate
+#from collection import CollectionModel
+#from album import AlbumModel
+#from user import UserModel
+#from photo import PhotoModel
+#from authenticate import Token
+
+from models import CollectionModel, AlbumModel, UserModel, PhotoModel, Token
 
 database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel, Token], True)
 

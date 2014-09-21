@@ -1,18 +1,5 @@
-from peewee import *
 from flask import abort
 from flask.ext.restful import Resource
-from . import database
-
-class UserModel (Model):
-
-    admin = BooleanField()
-    name = CharField()
-    username = CharField()
-    password = CharField()
-
-    class Meta:
-
-        database = database
 
 class UserInstance (Resource):
 
