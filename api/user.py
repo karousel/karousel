@@ -1,4 +1,5 @@
 from peewee import *
+from flask import abort
 from flask.ext.restful import Resource
 from . import database
 
@@ -12,6 +13,18 @@ class UserModel (Model):
     class Meta:
 
         database = database
+
+class UserInstance (Resource):
+
+    def get (self, id):
+
+        if UserModel.select().where(UserModel.id == id).count() != 1:
+
+            abort(404)
+
+        user = UserModel.get(UserModel.id == id)
+
+        return {'id': user.id, 'name': user.name, 'username': user.username}
 
 class UsersResource (Resource):
 

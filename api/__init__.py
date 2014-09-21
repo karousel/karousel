@@ -9,7 +9,7 @@ database = SqliteDatabase('gallery.db', threadlocals=True)
 
 from collection import CollectionModel
 from album import AlbumModel
-from user import UserModel, UsersResource
+from user import UserModel, UserInstance, UsersResource
 from photo import PhotoModel
 
 database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel], True)
@@ -36,4 +36,5 @@ from flask.ext.restful import Api
 app = Flask(__name__)
 api = Api(app)
 
+api.add_resource(UserInstance, '/users/<string:id>/')
 api.add_resource(UsersResource, '/users/')
