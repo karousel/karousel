@@ -10,5 +10,6 @@ database = SqliteDatabase('gallery.db')
 from album import AlbumModel
 from user import UserModel
 from photo import PhotoModel
+from collection import CollectionModel
 
-database.create_tables([PhotoModel, AlbumModel, UserModel], True)
+database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel], True)
