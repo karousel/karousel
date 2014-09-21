@@ -11,8 +11,9 @@ from collection import CollectionModel
 from album import AlbumModel
 from user import UserModel, UserInstance, UsersResource
 from photo import PhotoModel
+from authenticate import Token, Authenticate
 
-database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel], True)
+database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel, Token], True)
 
 if UserModel.select().count() == 0:
 
@@ -38,3 +39,4 @@ api = Api(app)
 
 api.add_resource(UserInstance, '/users/<string:id>/')
 api.add_resource(UsersResource, '/users/')
+api.add_resource(Authenticate, '/authenticate/')
