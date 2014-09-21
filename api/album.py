@@ -1,6 +1,25 @@
 from flask import abort, request
 from . import CollectionModel, AlbumModel, AuthenticatedResource
 
+class AlbumInstance (AuthenticatedResource):
+
+    def get (self, id):
+
+        if AlbumModel.select().where(AlbumModel.id == id).count() != 1:
+
+            abort(404)
+
+        album = AlbumModel.get(AlbumModel.id == id)
+
+        photos = [{
+                    'id': photo.id,
+                    'name': photo.name,
+                    'date': photo.date,
+                    'size': photo.size
+                  } for photo in album.photos]
+
+        return {'id': album.id, 'name': album.name, 'collection': {'name': album.collection.name, 'id': album.collection.id}, 'photos': photos}
+
 class AlbumsResource (AuthenticatedResource):
 
     def get (self):
