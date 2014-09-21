@@ -9,7 +9,7 @@ database = SqliteDatabase('gallery.db')
 
 from collection import CollectionModel
 from album import AlbumModel
-from user import UserModel
+from user import UserModel, UserResource
 from photo import PhotoModel
 
 database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel], True)
@@ -21,3 +21,8 @@ if s3.lookup(config.get('S3', 'Bucket')) is None:
 
     s3.create_bucket(config.get('S3', 'Bucket'))
 
+from flask import Flask
+from flask.ext.restful import Api
+
+app = Flask(__name__)
+api = Api(app)
