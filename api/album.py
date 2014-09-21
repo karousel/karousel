@@ -1,5 +1,5 @@
 from flask import abort, request
-from . import AlbumModel, AuthenticatedResource
+from . import CollectionModel, AlbumModel, AuthenticatedResource
 
 class AlbumsResource (AuthenticatedResource):
 
@@ -8,8 +8,6 @@ class AlbumsResource (AuthenticatedResource):
         collection = request.args.get('collection')
 
         if collection is None:
-
-            albums = AlbumModel.select()
 
             albums = [{
                         'id':album.id,
@@ -21,12 +19,53 @@ class AlbumsResource (AuthenticatedResource):
 
         else:
 
-            albums = AlbumModel.select()
+            if CollectionModel.select().where(CollectionModel.name == collection).count() != 1:
+
+                abort(404)
+
+            collection = CollectionModel.get(CollectionModel.name == collection)
 
             albums = [{
                         'id':album.id,
                         'name':album.name,
                         'collection': album.collection.name
-                      } for album in AlbumModel.select().where(album.collection.name == collection)]
+                      } for album in collection.albums]
 
             return albums
+
+    def post (self):
+
+        collection = request.form.get('collection')
+        name = request.form.get('name')
+
+        if not collection or not name:
+
+            print collection
+            print name
+
+            abort(400)
+
+        if CollectionModel.select().where(CollectionModel.name == collection).count() != 1:
+
+            abort(404)
+
+        collection = CollectionModel.get(CollectionModel.name == collection)
+
+        for album in collection.albums:
+
+            if album.name == name:
+
+                abort(409)
+
+        AlbumModel.create(
+            name = name,
+            collection = collection
+        )
+
+        albums = [{
+                    'id':album.id,
+                    'name':album.name,
+                    'collection': album.collection.name
+                  } for album in AlbumModel.select()]
+
+        return albums
