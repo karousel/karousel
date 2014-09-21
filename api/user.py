@@ -1,7 +1,6 @@
-from flask import abort
-from flask.ext.restful import Resource
+from . import UserModel, AuthenticatedResource
 
-class UserInstance (Resource):
+class UserInstance (AuthenticatedResource):
 
     def get (self, id):
 
@@ -13,12 +12,17 @@ class UserInstance (Resource):
 
         return {'id': user.id, 'name': user.name, 'username': user.username}
 
-class UsersResource (Resource):
+class UsersResource (AuthenticatedResource):
 
     def get (self):
 
         users = UserModel.select()
 
-        users = [{'id':user.id, 'admin':user.admin, 'name':user.name, 'username':user.username} for user in users]
+        users = [{
+                    'id':user.id,
+                    'admin':user.admin,
+                    'name':user.name,
+                    'username':user.username
+                 } for user in users]
 
         return users

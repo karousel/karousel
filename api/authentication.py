@@ -1,8 +1,40 @@
-from flask import request, abort
-from flask.ext.restful import Resource
-import bcrypt
+from functools import wraps
 import random
 import string
+import bcrypt
+from flask import request, abort, g
+from flask.ext.restful import Resource
+from . import Token, UserModel
+
+def verify (function):
+
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        token = request.headers.get('Auth-Token')
+
+        if token is None:
+
+              abort(401)
+
+        else:
+
+            if Token.select().where(Token.token == token).count() != 1:
+
+                  abort(401)
+
+            else:
+
+                token = Token.get(Token.token == token)
+                user = UserModel.get(UserModel.id == token.user)
+
+                g.user = user
+
+        return function(*args, **kwargs)
+    return wrapper
+
+class AuthenticatedResource (Resource):
+
+    method_decorators = [verify]
 
 class Authenticate (Resource):
 
