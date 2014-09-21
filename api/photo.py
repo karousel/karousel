@@ -7,7 +7,7 @@ class PhotoModel (Model):
     date = DateField()
     size = BigIntegerField()
     user = ForeignKeyField(UserModel, related_name='photos')
-    album = ForeignKeyField(AlbumModel, related_name='album')
+    album = ForeignKeyField(AlbumModel, related_name='photos')
 
     class Meta:
 
