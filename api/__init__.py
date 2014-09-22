@@ -29,6 +29,8 @@ if s3.lookup(config.get('S3', 'Bucket')) is None:
 
     s3.create_bucket(config.get('S3', 'Bucket'))
 
+store = s3.get_bucket(config.get('S3', 'Bucket'))
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -36,7 +38,9 @@ from authentication import Authenticate, AuthenticatedResource
 from user import UserInstance, UsersResource
 from collection import CollectionsResource
 from album import AlbumsResource, AlbumInstance
+from photo import PhotosResource
 
+api.add_resource(PhotosResource, '/photos/')
 api.add_resource(UserInstance, '/users/<string:id>/')
 api.add_resource(UsersResource, '/users/')
 api.add_resource(AlbumInstance, '/albums/<string:id>/')
