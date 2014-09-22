@@ -1,6 +1,5 @@
 import ConfigParser
 
-from boto.s3.connection import S3Connection
 from flask import Flask
 from flask.ext.restful import Api, Resource
 from peewee import *
@@ -25,14 +24,6 @@ if UserModel.select().count() == 0:
 	    username = 'admin',
 	    password = '$2a$12$pMtKl1b7h1sFKbMdBvPqbuza1tJN2ZNNAFMEs1RQmwqYTbBwrrKpy'
     )
-
-s3 = S3Connection(config.get('S3', 'AccessKey'), config.get('S3', 'SecretKey'))
-
-if s3.lookup(config.get('S3', 'Bucket')) is None:
-
-    s3.create_bucket(config.get('S3', 'Bucket'))
-
-store = s3.get_bucket(config.get('S3', 'Bucket'))
 
 app = Flask(__name__)
 api = Api(app)

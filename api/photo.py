@@ -1,7 +1,8 @@
+import os
 import datetime
 from flask import abort, request, g
 from werkzeug import secure_filename
-from . import PhotoModel, AlbumModel, AuthenticatedResource, store
+from . import config, PhotoModel, AlbumModel, AuthenticatedResource
 
 class PhotosResource (AuthenticatedResource):
 
@@ -22,18 +23,17 @@ class PhotosResource (AuthenticatedResource):
 
         filename = secure_filename(file.filename)
 
-        if store.get_key(filename) is not None:
-
-            abort(409)
-
-        key = store.new_key(filename)
-        key.set_contents_from_file(file)
-
         photo = PhotoModel.create(
             name = filename,
-            size = len(file.read()),
+            size = 0,
             album = album,
             user = g.user
         )
+
+        path = os.path.join(config.get('Photos', 'ProcessingDirectory'), str(photo.id))
+        file.save(path)
+
+        photo.size = os.stat(path).st_size
+        photo.save()
 
         return {'id': photo.id, 'name': photo.name, 'date': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S"), 'size': photo.size}
