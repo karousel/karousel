@@ -16,11 +16,12 @@ database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel, Toke
 
 if UserModel.select().count() == 0:
 
+    # username = admin; password = password
     UserModel.create(
-	      admin = True,
-	      name = 'Administrator',
-	      username = 'admin',
-	      password = '$2a$12$pMtKl1b7h1sFKbMdBvPqbuza1tJN2ZNNAFMEs1RQmwqYTbBwrrKpy'
+        admin = True,
+        name = 'Administrator',
+	    username = 'admin',
+	    password = '$2a$12$pMtKl1b7h1sFKbMdBvPqbuza1tJN2ZNNAFMEs1RQmwqYTbBwrrKpy'
     )
 
 s3 = S3Connection(config.get('S3', 'AccessKey'), config.get('S3', 'SecretKey'))
