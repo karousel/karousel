@@ -14,7 +14,7 @@ class AlbumInstance (AuthenticatedResource):
         photos = [{
                     'id': photo.id,
                     'name': photo.name,
-                    'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S"),
+                    'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S") ,
                     'size': photo.size
                   } for photo in album.photos]
 
@@ -31,7 +31,10 @@ class AlbumsResource (AuthenticatedResource):
             albums = [{
                         'id':album.id,
                         'name':album.name,
-                        'collection': album.collection.name
+                        'collection': {
+                            'name': album.collection.name,
+                            'id': album.collection.id
+                        }
                       } for album in AlbumModel.select()]
 
             return albums
@@ -47,7 +50,10 @@ class AlbumsResource (AuthenticatedResource):
             albums = [{
                         'id':album.id,
                         'name':album.name,
-                        'collection': album.collection.name
+                        'collection': {
+                            'name': album.collection.name,
+                            'id': album.collection.id
+                        }
                       } for album in collection.albums]
 
             return albums
@@ -84,7 +90,10 @@ class AlbumsResource (AuthenticatedResource):
         albums = [{
                     'id':album.id,
                     'name':album.name,
-                    'collection': album.collection.name
+                    'collection': {
+                        'name': album.collection.name,
+                        'id': album.collection.id
+                    }
                   } for album in AlbumModel.select()]
 
         return albums
