@@ -41,11 +41,15 @@ class AlbumsResource (AuthenticatedResource):
 
         else:
 
-            if CollectionModel.select().where(CollectionModel.name == collection).count() != 1:
+            if not collection.isdigit():
+
+                abort(400)
+
+            if CollectionModel.select().where(CollectionModel.id == collection).count() != 1:
 
                 abort(404)
 
-            collection = CollectionModel.get(CollectionModel.name == collection)
+            collection = CollectionModel.get(CollectionModel.id == collection)
 
             albums = [{
                         'id':album.id,
@@ -63,18 +67,15 @@ class AlbumsResource (AuthenticatedResource):
         collection = request.form.get('collection')
         name = request.form.get('name')
 
-        if not collection or not name:
-
-            print collection
-            print name
+        if not collection or not name or not collection.isdigit():
 
             abort(400)
 
-        if CollectionModel.select().where(CollectionModel.name == collection).count() != 1:
+        if CollectionModel.select().where(CollectionModel.id == collection).count() != 1:
 
             abort(404)
 
-        collection = CollectionModel.get(CollectionModel.name == collection)
+        collection = CollectionModel.get(CollectionModel.id == collection)
 
         for album in collection.albums:
 
