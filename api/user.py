@@ -1,5 +1,5 @@
 from flask import request, abort
-from . import UserModel, AuthenticatedResource
+from . import UserModel, Resource, AuthenticatedResource
 import bcrypt
 
 class UserInstance (AuthenticatedResource):
@@ -29,6 +29,8 @@ class UsersResource (AuthenticatedResource):
 
         return users
 
+class RegistrationResource (Resource):
+
     def post (self):
 
         name = request.form.get('name').encode('utf-8')
@@ -43,18 +45,11 @@ class UsersResource (AuthenticatedResource):
 
             abort(409)
 
-        UserModel.create(
+        user = UserModel.create(
             admin = False,
             name = name,
             username = username,
             password = bcrypt.hashpw(password, bcrypt.gensalt())
         )
 
-        users =  [{
-                    'id': user.id,
-                    'admin': user.admin,
-                    'name': user.name,
-                    'username': user.username
-                  } for user in UserModel.select()]
-
-        return users
+        return {'id': user.id, 'name': user.name, 'username': user.username}
