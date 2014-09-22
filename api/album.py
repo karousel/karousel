@@ -14,7 +14,7 @@ class AlbumInstance (AuthenticatedResource):
         photos = [{
                     'id': photo.id,
                     'name': photo.name,
-                    'date': photo.date,
+                    'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S"),
                     'size': photo.size
                   } for photo in album.photos]
 
