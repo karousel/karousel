@@ -1,5 +1,5 @@
 from flask import request, abort
-from . import UserModel, Resource, AuthenticatedResource
+from . import config, UserModel, Resource, AuthenticatedResource
 import bcrypt
 
 class UserInstance (AuthenticatedResource):
@@ -32,6 +32,10 @@ class UsersResource (AuthenticatedResource):
 class RegistrationResource (Resource):
 
     def post (self):
+
+        if not config.getboolean('Users', 'Registration'):
+
+            abort(401)
 
         name = request.form.get('name').encode('utf-8')
         username = request.form.get('username').encode('utf-8')
