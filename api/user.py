@@ -1,4 +1,4 @@
-from flask import request, abort
+from flask import request, abort, g
 from . import config, UserModel, Resource, AuthenticatedResource
 import bcrypt
 
@@ -13,6 +13,27 @@ class UserInstance (AuthenticatedResource):
         user = UserModel.get(UserModel.id == id)
 
         return {'id': user.id, 'name': user.name, 'username': user.username}
+
+    def delete (self, id):
+
+        if not g.user.admin:
+
+            abort(401)
+
+        if UserModel.select().where(UserModel.id == id).count() != 1:
+
+            abort(404)
+
+        user = UserModel.get(UserModel.id == id)
+
+        for photo in user.photos:
+
+            photo.delete_instance()
+
+        user.delete_instance()
+
+        return '', 204
+
 
 class UsersResource (AuthenticatedResource):
 
