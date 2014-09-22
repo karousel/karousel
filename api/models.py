@@ -1,3 +1,4 @@
+import datetime
 from peewee import *
 from . import database
 
@@ -32,8 +33,8 @@ class UserModel (Model):
 class PhotoModel (Model):
 
     name = CharField()
-    date = DateField()
-    size = BigIntegerField()
+    uploaded = DateTimeField(default=datetime.datetime.now)
+    size = IntegerField()
     user = ForeignKeyField(UserModel, related_name='photos')
     album = ForeignKeyField(AlbumModel, related_name='photos')
 
