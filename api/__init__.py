@@ -16,10 +16,10 @@ database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel, Toke
 
 if UserModel.select().count() == 0:
 
-	  UserModel.create(
+    UserModel.create(
 	      admin = True,
-	      name = 'Admin',
-	      username = 'Admin',
+	      name = 'Administrator',
+	      username = 'admin',
 	      password = '$2a$12$pMtKl1b7h1sFKbMdBvPqbuza1tJN2ZNNAFMEs1RQmwqYTbBwrrKpy'
     )
 
