@@ -5,6 +5,8 @@ from flask import Flask
 from flask.ext.restful import Api, Resource
 from peewee import *
 
+from cors import crossdomain
+
 config = ConfigParser.RawConfigParser()
 config.read('server.conf')
 
@@ -40,6 +42,8 @@ from user import UserInstance, UsersResource
 from collection import CollectionsResource
 from album import AlbumsResource, AlbumInstance
 from photo import PhotosResource
+
+api.decorators=[crossdomain(origin='*')]
 
 api.add_resource(PhotosResource, '/photos/')
 api.add_resource(UserInstance, '/users/<string:id>/')
