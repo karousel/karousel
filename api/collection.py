@@ -1,4 +1,4 @@
-from flask import abort, request
+from flask import abort, request, g
 from . import CollectionModel, AuthenticatedResource
 
 class CollectionsResource (AuthenticatedResource):
@@ -13,6 +13,10 @@ class CollectionsResource (AuthenticatedResource):
         return collections
 
     def post (self):
+
+        if not g.user.admin:
+
+            abort(401)
 
         name = request.form.get('name')
 
