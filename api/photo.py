@@ -33,6 +33,21 @@ class PhotoInstance (AuthenticatedResource):
 
 class PhotosResource (AuthenticatedResource):
 
+    def get (self):
+
+        photos = [{
+                    'id':photo.id,
+                    'name':photo.name,
+                    'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S"),
+                    'size': photo.size,
+                    'album': {
+                        'id': photo.album.id,
+                        'name': photo.album.name
+                    }
+                  } for photo in PhotoModel.select()]
+
+        return photos
+
     def post (self):
 
         album = request.form.get('album')
