@@ -1,5 +1,5 @@
 from flask import request, abort, g
-from . import config, UserModel, Resource, AuthenticatedResource
+from . import config, UserModel, Resource, Token, AuthenticatedResource
 import bcrypt
 
 class UserInstance (AuthenticatedResource):
@@ -54,7 +54,28 @@ class RegistrationResource (Resource):
 
     def post (self):
 
-        if not config.getboolean('Users', 'Registration'):
+        def registration_enabled ():
+
+            return config.getboolean('Users', 'Registration')
+
+        def is_admin ():
+
+            token = request.headers.get('Auth-Token')
+
+            if token is not None:
+
+                if Token.select().where(Token.token == token).count() == 1:
+
+                    token = Token.get(Token.token == token)
+                    user = UserModel.get(UserModel.id == token.user)
+
+                    if user.admin:
+
+                        return True
+
+            return False
+
+        if not (registration_enabled() or is_admin()):
 
             abort(401)
 
