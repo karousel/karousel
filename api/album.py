@@ -20,6 +20,26 @@ class AlbumInstance (AuthenticatedResource):
 
         return {'id': album.id, 'name': album.name, 'collection': {'name': album.collection.name, 'id': album.collection.id}, 'photos': photos}
 
+    def delete (self, id):
+
+        if not g.user.admin:
+
+            abort(401)
+
+        if AlbumModel.select().where(AlbumModel.id == id).count() != 1:
+
+            abort(404)
+
+        album = AlbumModel.get(AlbumModel.id == id)
+
+        for photo in album.photos:
+
+            photo.delete_instance()
+
+        album.delete_instance()
+
+        return '', 204
+
 class AlbumsResource (AuthenticatedResource):
 
     def get (self):
