@@ -5,10 +5,6 @@ class CollectionInstance (AuthenticatedResource):
 
     def get (self, id):
 
-        if not g.user.admin:
-
-            abort(401)
-
         if CollectionModel.select().where(CollectionModel.id == id).count() != 1:
 
             abort(404)
