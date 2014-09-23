@@ -30,7 +30,7 @@ api = Api(app)
 
 from authentication import Authenticate, AuthenticatedResource
 from user import UserInstance, UsersResource, RegistrationResource
-from collection import CollectionsResource
+from collection import CollectionsResource, CollectionInstance
 from album import AlbumsResource, AlbumInstance
 from photo import PhotosResource, PhotoInstance
 
@@ -43,5 +43,6 @@ api.add_resource(UsersResource, '/users/')
 api.add_resource(RegistrationResource, '/users/')
 api.add_resource(AlbumInstance, '/albums/<string:id>/')
 api.add_resource(AlbumsResource, '/albums/')
+api.add_resource(CollectionInstance, '/collections/<string:id>/')
 api.add_resource(CollectionsResource, '/collections/')
 api.add_resource(Authenticate, '/authenticate/')

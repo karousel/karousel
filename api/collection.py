@@ -1,6 +1,27 @@
 from flask import abort, request, g
 from . import CollectionModel, AuthenticatedResource
 
+class CollectionInstance (AuthenticatedResource):
+
+    def get (self, id):
+
+        if not g.user.admin:
+
+            abort(401)
+
+        if CollectionModel.select().where(CollectionModel.id == id).count() != 1:
+
+            abort(404)
+
+        collection = CollectionModel.get(CollectionModel.id == id)
+
+        albums = [{
+                    'id': album.id,
+                    'name': album.name
+                  } for album in collection.albums]
+
+        return {'id': collection.id, 'name': collection.name, 'albums': albums}
+
 class CollectionsResource (AuthenticatedResource):
 
     def get (self):
