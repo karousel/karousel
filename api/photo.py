@@ -3,6 +3,17 @@ import datetime
 from flask import abort, request, g
 from werkzeug import secure_filename
 from . import config, PhotoModel, AlbumModel, AuthenticatedResource
+class PhotoInstance (AuthenticatedResource):
+
+    def get (self, id):
+
+        if PhotoModel.select().where(PhotoModel.id == id).count() != 1:
+
+            abort(404)
+
+        photo = PhotoModel.get(PhotoModel.id == id)
+
+        return {'id': photo.id, 'name': photo.name, 'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S"), 'size': photo.size}
 
 class PhotosResource (AuthenticatedResource):
 
