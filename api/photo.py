@@ -15,6 +15,22 @@ class PhotoInstance (AuthenticatedResource):
 
         return {'id': photo.id, 'name': photo.name, 'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S"), 'size': photo.size}
 
+    def delete (self, id):
+
+        if not g.user.admin:
+
+            abort(401)
+
+        if PhotoModel.select().where(PhotoModel.id == id).count() != 1:
+
+            abort(404)
+
+        photo = PhotoModel.get(PhotoModel.id == id)
+
+        photo.delete_instance()
+
+        return '', 204
+
 class PhotosResource (AuthenticatedResource):
 
     def post (self):
