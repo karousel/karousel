@@ -17,7 +17,8 @@ class PhotoInstance (AuthenticatedResource):
             'id': photo.id,
             'name': photo.name,
             'uploaded': photo.uploaded.strftime('%Y-%m-%d %H:%M:%S'),
-            'size': photo.size
+            'size': photo.size,
+            'status': photo.status
         }
 
         return photo
