@@ -51,11 +51,11 @@ class PhotoModel (Model):
 class TokenModel (Model):
 
     token = CharField()
-    user = IntegerField()
     created = DateTimeField(default=datetime.datetime.now)
     address = CharField()
     location = CharField()
     user_agent = CharField()
+    user = ForeignKeyField(UserModel, related_name='tokens')
 
     class Meta:
 
