@@ -37,6 +37,9 @@ class PhotoModel (Model):
     size = IntegerField()
     user = ForeignKeyField(UserModel, related_name='photos')
     album = ForeignKeyField(AlbumModel, related_name='photos')
+    
+    # 0 - Waiting, 1 - Processing, 2 - Finalizing, 3 - Uploaded
+    status = IntegerField(default=0)
 
     class Meta:
 
