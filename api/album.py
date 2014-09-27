@@ -11,14 +11,26 @@ class AlbumInstance (AuthenticatedResource):
 
         album = AlbumModel.get(AlbumModel.id == id)
 
-        photos = [{
-                    'id': photo.id,
-                    'name': photo.name,
-                    'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S") ,
-                    'size': photo.size
-                  } for photo in album.photos]
+        photos = [
+            {
+                'id': photo.id,
+                'name': photo.name,
+                'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S") ,
+                'size': photo.size
+            } for photo in album.photos
+        ]
 
-        return {'id': album.id, 'name': album.name, 'collection': {'name': album.collection.name, 'id': album.collection.id}, 'photos': photos}
+        album = {
+            'id': album.id,
+            'name': album.name,
+            'collection': {
+                'name': album.collection.name,
+                'id': album.collection.id
+            },
+            'photos': photos
+        }
+
+        return album
 
     def delete (self, id):
 
@@ -48,14 +60,16 @@ class AlbumsResource (AuthenticatedResource):
 
         if collection is None:
 
-            albums = [{
-                        'id':album.id,
-                        'name':album.name,
-                        'collection': {
-                            'name': album.collection.name,
-                            'id': album.collection.id
-                        }
-                      } for album in AlbumModel.select()]
+            albums = [
+                {
+                    'id':album.id,
+                    'name':album.name,
+                    'collection': {
+                        'name': album.collection.name,
+                        'id': album.collection.id
+                    }
+                } for album in AlbumModel.select()
+            ]
 
             return albums
 
@@ -71,14 +85,16 @@ class AlbumsResource (AuthenticatedResource):
 
             collection = CollectionModel.get(CollectionModel.id == collection)
 
-            albums = [{
-                        'id':album.id,
-                        'name':album.name,
-                        'collection': {
-                            'name': album.collection.name,
-                            'id': album.collection.id
-                        }
-                      } for album in collection.albums]
+            albums = [
+                {
+                    'id':album.id,
+                    'name':album.name,
+                    'collection': {
+                        'name': album.collection.name,
+                        'id': album.collection.id
+                    }
+                } for album in collection.albums
+            ]
 
             return albums
 
@@ -112,13 +128,15 @@ class AlbumsResource (AuthenticatedResource):
             collection = collection
         )
 
-        albums = [{
-                    'id':album.id,
-                    'name':album.name,
-                    'collection': {
-                        'name': album.collection.name,
-                        'id': album.collection.id
-                    }
-                  } for album in AlbumModel.select()]
+        albums = [
+            {
+                'id':album.id,
+                'name':album.name,
+                'collection': {
+                    'name': album.collection.name,
+                    'id': album.collection.id
+                }
+            } for album in AlbumModel.select()
+        ]
 
         return albums
