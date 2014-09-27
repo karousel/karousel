@@ -53,6 +53,9 @@ class TokenModel (Model):
     token = CharField()
     user = IntegerField()
     created = DateTimeField(default=datetime.datetime.now)
+    address = CharField()
+    location = CharField()
+    user_agent = CharField()
 
     class Meta:
 
