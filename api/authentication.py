@@ -4,7 +4,7 @@ import string
 import bcrypt
 from flask import request, abort, g
 from flask.ext.restful import Resource
-from . import Token, UserModel
+from . import TokenModel, UserModel
 
 def verify (function):
 
@@ -18,13 +18,13 @@ def verify (function):
 
         else:
 
-            if Token.select().where(Token.token == token).count() != 1:
+            if TokenModel.select().where(TokenModel.token == token).count() != 1:
 
                   abort(401)
 
             else:
 
-                token = Token.get(Token.token == token)
+                token = TokenModel.get(TokenModel.token == token)
                 user = UserModel.get(UserModel.id == token.user)
 
                 g.user = user
@@ -69,7 +69,7 @@ class Authenticate (Resource):
             token = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30))
             user = UserModel.get(UserModel.username == username)
 
-            Token.create(
+            TokenModel.create(
                 token = token,
                 user = user.id
             )

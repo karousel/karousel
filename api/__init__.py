@@ -11,9 +11,9 @@ config.read('server.conf')
 
 database = SqliteDatabase('gallery.db', threadlocals=True)
 
-from models import CollectionModel, AlbumModel, UserModel, PhotoModel, Token
+from models import CollectionModel, AlbumModel, UserModel, PhotoModel, TokenModel
 
-database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel, Token], True)
+database.create_tables([PhotoModel, AlbumModel, UserModel, CollectionModel, TokenModel], True)
 
 if UserModel.select().count() == 0:
 

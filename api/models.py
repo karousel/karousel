@@ -43,7 +43,7 @@ class PhotoModel (Model):
         database = database
 
 
-class Token (Model):
+class TokenModel (Model):
 
     token = CharField()
     user = IntegerField()

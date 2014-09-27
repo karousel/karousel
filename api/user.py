@@ -1,5 +1,5 @@
 from flask import request, abort, g
-from . import config, UserModel, Resource, Token, AuthenticatedResource
+from . import config, UserModel, Resource, TokenModel, AuthenticatedResource
 import bcrypt
 
 class UserInstance (AuthenticatedResource):
@@ -72,9 +72,9 @@ class RegistrationResource (Resource):
 
             if token is not None:
 
-                if Token.select().where(Token.token == token).count() == 1:
+                if TokenModel.select().where(TokenModel.token == token).count() == 1:
 
-                    token = Token.get(Token.token == token)
+                    token = TokenModel.get(TokenModel.token == token)
                     user = UserModel.get(UserModel.id == token.user)
 
                     if user.admin:
