@@ -25,6 +25,7 @@ class UserModel (Model):
 
     admin = BooleanField()
     name = CharField()
+    gravatar = CharField()
     username = CharField()
     password = CharField()
 
