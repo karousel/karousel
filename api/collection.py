@@ -11,12 +11,20 @@ class CollectionInstance (AuthenticatedResource):
 
         collection = CollectionModel.get(CollectionModel.id == id)
 
-        albums = [{
-                    'id': album.id,
-                    'name': album.name
-                  } for album in collection.albums]
+        albums = [
+            {
+                'id': album.id,
+                'name': album.name
+            } for album in collection.albums
+        ]
 
-        return {'id': collection.id, 'name': collection.name, 'albums': albums}
+        collection = {
+            'id': collection.id,
+            'name': collection.name,
+            'albums': albums
+        }
+
+        return collection
 
     def delete (self, id):
 
@@ -46,10 +54,12 @@ class CollectionsResource (AuthenticatedResource):
 
     def get (self):
 
-        collections = [{
-                        'id':collection.id,
-                        'name':collection.name,
-                       } for collection in CollectionModel.select()]
+        collections = [
+            {
+                'id':collection.id,
+                'name':collection.name,
+            } for collection in CollectionModel.select()
+        ]
 
         return collections
 
@@ -73,9 +83,11 @@ class CollectionsResource (AuthenticatedResource):
             name = name
         )
 
-        collections = [{
-                        'id':collection.id,
-                        'name':collection.name,
-                       } for collection in CollectionModel.select()]
+        collections = [
+            {
+                'id':collection.id,
+                'name':collection.name,
+            } for collection in CollectionModel.select()
+        ]
 
         return collections
