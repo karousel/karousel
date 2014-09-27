@@ -13,7 +13,14 @@ class PhotoInstance (AuthenticatedResource):
 
         photo = PhotoModel.get(PhotoModel.id == id)
 
-        return {'id': photo.id, 'name': photo.name, 'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S"), 'size': photo.size}
+        photo = {
+            'id': photo.id,
+            'name': photo.name,
+            'uploaded': photo.uploaded.strftime('%Y-%m-%d %H:%M:%S'),
+            'size': photo.size
+        }
+
+        return photo
 
     def delete (self, id):
 
@@ -35,16 +42,18 @@ class PhotosResource (AuthenticatedResource):
 
     def get (self):
 
-        photos = [{
-                    'id':photo.id,
-                    'name':photo.name,
-                    'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S"),
-                    'size': photo.size,
-                    'album': {
-                        'id': photo.album.id,
-                        'name': photo.album.name
-                    }
-                  } for photo in PhotoModel.select()]
+        photos = [
+            {
+                'id':photo.id,
+                'name':photo.name,
+                'uploaded': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S"),
+                'size': photo.size,
+                'album': {
+                    'id': photo.album.id,
+                    'name': photo.album.name
+                }
+            } for photo in PhotoModel.select()
+        ]
 
         return photos
 
@@ -77,5 +86,12 @@ class PhotosResource (AuthenticatedResource):
 
         photo.size = os.stat(path).st_size
         photo.save()
+        
+        photo = {
+            'id': photo.id,
+            'name': photo.name,
+            'date': photo.uploaded.strftime('%Y-%m-%d %H:%M:%S'),
+            'size': photo.size
+        }
 
-        return {'id': photo.id, 'name': photo.name, 'date': photo.uploaded.strftime("%Y-%m-%d %H:%M:%S"), 'size': photo.size}
+        return photo
