@@ -51,7 +51,8 @@ class PhotosResource (AuthenticatedResource):
                 'album': {
                     'id': photo.album.id,
                     'name': photo.album.name
-                }
+                },
+                'status': photo.status
             } for photo in PhotoModel.select()
         ]
 
