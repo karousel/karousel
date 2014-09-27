@@ -2,6 +2,7 @@ from functools import wraps
 import random
 import string
 import bcrypt
+import requests
 from flask import request, abort, g
 from flask.ext.restful import Resource
 from . import TokenModel, UserModel
@@ -68,10 +69,29 @@ class Authenticate (Resource):
 
             token = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30))
             user = UserModel.get(UserModel.username == username)
+            
+            address = ''
+
+            try:
+
+                address = request.headers.getlist('X-Forwarded-For')[0]
+
+            except Exception:
+
+                address = request.remote_addr
+            
+            if address == '127.0.0.1':
+
+            	  address = '46.19.37.108'
+
+            r = requests.get('http://www.telize.com/geoip/%s' % address)
 
             TokenModel.create(
                 token = token,
-                user = user.id
+                user = user,
+                address = address,
+                user_agent = request.headers['User-Agent'],
+                location = r.json()['country_code']
             )
 
             return {'token': token}
