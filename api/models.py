@@ -5,6 +5,7 @@ from . import database
 class CollectionModel (Model):
 
     name = CharField()
+    created = DateTimeField(default=datetime.datetime.now)
 
     class Meta:
 
@@ -13,6 +14,7 @@ class CollectionModel (Model):
 class AlbumModel (Model):
 
     name = CharField()
+    created = DateTimeField(default=datetime.datetime.now)
     collection = ForeignKeyField(CollectionModel, related_name='albums')
 
     class Meta:
@@ -50,6 +52,7 @@ class TokenModel (Model):
 
     token = CharField()
     user = IntegerField()
+    created = DateTimeField(default=datetime.datetime.now)
 
     class Meta:
 
