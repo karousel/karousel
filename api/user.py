@@ -15,7 +15,8 @@ class UserInstance (AuthenticatedResource):
         user = {
             'id': user.id,
             'name': user.name,
-            'username': user.username
+            'username': user.username,
+            'gravatar': user.gravatar
         }
 
         return user
@@ -52,7 +53,8 @@ class UsersResource (AuthenticatedResource):
                 'id':user.id,
                 'admin':user.admin,
                 'name':user.name,
-                'username':user.username
+                'username':user.username,
+                'gravatar': user.gravatar
             } for user in users
         ]
 
