@@ -35,6 +35,22 @@ class PhotoInstance (AuthenticatedResource):
 
         photo = PhotoModel.get(PhotoModel.id == id)
 
+        if photo.status != 3:
+
+            path = os.path.join(config.get('Photos', 'ProcessingDirectory'), str(photo.id))
+        
+        else:
+
+        	  path = os.path.join(config.get('Photos', 'FinalDirectory'), str(photo.id))
+
+        try:
+
+            os.remove(path)
+
+        except OSError:
+
+            pass
+
         photo.delete_instance()
 
         return '', 204
