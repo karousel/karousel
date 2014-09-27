@@ -12,7 +12,13 @@ class UserInstance (AuthenticatedResource):
 
         user = UserModel.get(UserModel.id == id)
 
-        return {'id': user.id, 'name': user.name, 'username': user.username}
+        user = {
+            'id': user.id,
+            'name': user.name,
+            'username': user.username
+        }
+
+        return user
 
     def delete (self, id):
 
@@ -41,12 +47,14 @@ class UsersResource (AuthenticatedResource):
 
         users = UserModel.select()
 
-        users = [{
-                    'id':user.id,
-                    'admin':user.admin,
-                    'name':user.name,
-                    'username':user.username
-                 } for user in users]
+        users = [
+            {
+                'id':user.id,
+                'admin':user.admin,
+                'name':user.name,
+                'username':user.username
+            } for user in users
+        ]
 
         return users
 
@@ -98,4 +106,10 @@ class RegistrationResource (Resource):
             password = bcrypt.hashpw(password, bcrypt.gensalt())
         )
 
-        return {'id': user.id, 'name': user.name, 'username': user.username}
+        user = {
+            'id': user.id,
+            'name': user.name,
+            'username': user.username
+        }
+
+        return user
