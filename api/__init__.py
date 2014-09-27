@@ -22,7 +22,8 @@ if UserModel.select().count() == 0:
         admin = True,
         name = 'Administrator',
         username = 'admin',
-        password = '$2a$12$pMtKl1b7h1sFKbMdBvPqbuza1tJN2ZNNAFMEs1RQmwqYTbBwrrKpy'
+        password = '$2a$12$pMtKl1b7h1sFKbMdBvPqbuza1tJN2ZNNAFMEs1RQmwqYTbBwrrKpy',
+        gravatar = ''
     )
 
 app = Flask(__name__)
