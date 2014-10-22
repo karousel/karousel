@@ -11,11 +11,20 @@ def auth(function):
 
     @wraps(function)
     def wrapper(*args, **kwargs):
+
         token = request.headers.get('Auth-Token')
 
         if token is None:
 
-              abort(403)
+            token = request.form.get('auth_token')
+
+        if token is None:
+
+            token = request.args.get('auth_token')
+
+        if token is None:
+
+            abort(403)
 
         else:
 
