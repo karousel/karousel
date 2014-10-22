@@ -41,8 +41,17 @@ class Authenticate (Resource):
 
     def post (self):
 
-        username = request.form.get('username').encode('utf-8')
-        password = request.form.get('password').encode('utf-8')
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username and password:
+
+            username = username.encode('utf-8')
+            password = password.encode('utf-8')
+
+        else:
+
+            abort(400)
 
         def verify (username, password):
 
@@ -61,7 +70,7 @@ class Authenticate (Resource):
 
             return False
 
-        if not username or not password or not verify(username, password):
+        if not verify(username, password):
 
             abort(403)
 
