@@ -15,13 +15,13 @@ def verify (function):
 
         if token is None:
 
-              abort(401)
+              abort(403)
 
         else:
 
             if TokenModel.select().where(TokenModel.token == token).count() != 1:
 
-                  abort(401)
+                  abort(403)
 
             else:
 
@@ -63,13 +63,13 @@ class Authenticate (Resource):
 
         if not username or not password or not verify(username, password):
 
-            abort(401)
+            abort(403)
 
         else:
 
             token = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30))
             user = UserModel.get(UserModel.username == username)
-            
+
             address = ''
 
             try:
@@ -79,7 +79,7 @@ class Authenticate (Resource):
             except Exception:
 
                 address = request.remote_addr
-            
+
             if address == '127.0.0.1':
 
             	  address = '46.19.37.108'
