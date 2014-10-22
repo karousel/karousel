@@ -7,7 +7,7 @@ from flask import request, abort, g
 from flask.ext.restful import Resource
 from . import TokenModel, UserModel
 
-def verify (function):
+def auth(function):
 
     @wraps(function)
     def wrapper(*args, **kwargs):
@@ -35,7 +35,7 @@ def verify (function):
 
 class AuthenticatedResource (Resource):
 
-    method_decorators = [verify]
+    method_decorators = [auth]
 
 class Authenticate (Resource):
 
