@@ -5,9 +5,9 @@ import (
 )
 
 type Collection struct {
-	Id       string
-	Name     string
-	Created  time.Time
-	Modified time.Time
-	Albums   []Album
+	Id       string    `json:"id"`
+	Name     string    `json:"name" gorethink:"name"`
+	Created  time.Time `json:"created" gorethink:"created"`
+	Modified time.Time `json:"modified" gorethink:"modified"`
+	Albums   []Album   `json:"albums" gorethink:"albums"`
 }
