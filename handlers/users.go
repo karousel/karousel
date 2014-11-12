@@ -1,9 +1,7 @@
 package handlers
 
 import (
-	"fmt"
 	"log"
-	"time"
 
 	"github.com/citruspi/Karousel-API/models"
 
