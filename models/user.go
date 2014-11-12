@@ -5,6 +5,7 @@ import (
 )
 
 type User struct {
+	Id       string
 	Admin    bool
 	Username string
 	Password string
