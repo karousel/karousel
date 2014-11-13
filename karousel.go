@@ -54,6 +54,7 @@ func main() {
 	router.GET("/users/", handlers.GetUserResource)
 	router.POST("/users/", handlers.PostUserResource)
 	router.GET("/users/:id/", handlers.GetUserInstance)
+	router.DELETE("/users/:id/", handlers.DeleteUserInstance)
 
 	router.Run(fmt.Sprintf(":%v", config.Web.Port))
 }
