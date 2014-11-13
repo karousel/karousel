@@ -107,5 +107,9 @@ func GetUserResource(c *gin.Context) {
 	var users []models.User
 	db.Find(&users)
 
+	for index, _ := range users {
+		users[index].Password = ""
+	}
+
 	c.JSON(200, users)
 }
