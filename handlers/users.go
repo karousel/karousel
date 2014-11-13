@@ -2,12 +2,14 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/citruspi/karousel/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func PostUserResource(c *gin.Context) {
@@ -39,6 +41,14 @@ func PostUserResource(c *gin.Context) {
 				c.JSON(409, response)
 			} else {
 				user.Joined = time.Now().UTC()
+
+				hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				user.Password = string(hashedPassword)
 
 				db.Create(&user)
 
