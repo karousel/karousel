@@ -1,5 +1,8 @@
-## Karousel-API
+## Karousel
 
-## License
+Karousel is a gallery API implemented in Go.
 
-Licensed under the MIT license. See the `LICENSE` file for more information.
+## Licensing
+
+The source for Karousel is dedicated to the public domain. Check the `UNLICENSE`
+file for more information.
