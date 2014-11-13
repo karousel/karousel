@@ -51,6 +51,8 @@ func main() {
 	router.Use(middleware.CORS())
 	router.Use(middleware.Database(db))
 
+	router.POST("/tokens/", handlers.PostTokenResource)
+
 	router.GET("/users/", handlers.GetUserResource)
 	router.POST("/users/", handlers.PostUserResource)
 	router.GET("/users/:id/", handlers.GetUserInstance)
