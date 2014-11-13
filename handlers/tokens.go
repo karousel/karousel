@@ -25,7 +25,6 @@ func PostTokenResource(c *gin.Context) {
 		response["error"] = "Incomplete submission."
 		c.JSON(400, response)
 	} else {
-
 		var queryUser models.User
 
 		db.Where("username = ?", user.Username).First(&queryUser)
@@ -48,13 +47,13 @@ func PostTokenResource(c *gin.Context) {
 					log.Fatal(err)
 				}
 
-				token := jwt.New(jwt.GetSigningMethod("HS256"))
+				token := jwt.New(jwt.GetSigningMethod("RS256"))
 
 				token.Claims["id"] = queryUser.Id
 
 				expires := time.Now().Add(time.Hour * 72).UTC()
 
-				token.Claims["life"] = expires
+				token.Claims["life"] = expires.Format(time.RFC3339)
 
 				tokenString, err := token.SignedString(key)
 
@@ -62,7 +61,7 @@ func PostTokenResource(c *gin.Context) {
 				response["token"] = tokenString
 				response["expires"] = expires.String()
 
-				c.JSON(404, response)
+				c.JSON(200, response)
 			}
 		}
 	}

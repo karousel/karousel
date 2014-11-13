@@ -53,10 +53,10 @@ func main() {
 
 	router.POST("/tokens/", handlers.PostTokenResource)
 
-	router.GET("/users/", handlers.GetUserResource)
+	router.GET("/users/", middleware.Authenticate(), handlers.GetUserResource)
 	router.POST("/users/", handlers.PostUserResource)
-	router.GET("/users/:id/", handlers.GetUserInstance)
-	router.DELETE("/users/:id/", handlers.DeleteUserInstance)
+	router.GET("/users/:id/", middleware.Authenticate(), handlers.GetUserInstance)
+	router.DELETE("/users/:id/", middleware.Authenticate(), handlers.DeleteUserInstance)
 
 	router.Run(fmt.Sprintf(":%v", config.Web.Port))
 }
