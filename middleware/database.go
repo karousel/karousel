@@ -1,13 +1,13 @@
 package middleware
 
 import (
-	r "github.com/dancannon/gorethink"
+	"github.com/coopernurse/gorp"
 	"github.com/gin-gonic/gin"
 )
 
-func Database(session *r.Session) gin.HandlerFunc {
+func Database(db *gorp.DbMap) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Set("session", session)
+		c.Set("db", db)
 		c.Next()
 	}
 }

@@ -3,23 +3,17 @@ package handlers
 import (
 	"log"
 
-	"github.com/citruspi/Karousel-API/models"
+	"github.com/citruspi/karousel/models"
 
-	r "github.com/dancannon/gorethink"
+	"github.com/coopernurse/gorp"
 	"github.com/gin-gonic/gin"
 )
 
 func GetUserResource(c *gin.Context) {
-	session := c.MustGet("session").(*r.Session)
-
-	rows, err := r.Table("users").Run(session)
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	db := c.MustGet("db").(*gorp.DbMap)
 
 	var users []models.User
-	err = rows.All(&users)
+	_, err := db.Select(&users, "select * from users order by id")
 
 	if err != nil {
 		log.Fatal(err)

@@ -1,15 +1,18 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"io/ioutil"
 	"log"
 
-	"github.com/citruspi/Karousel-API/handlers"
-	"github.com/citruspi/Karousel-API/middleware"
+	"github.com/citruspi/karousel/handlers"
+	"github.com/citruspi/karousel/middleware"
+	"github.com/citruspi/karousel/models"
 
-	r "github.com/dancannon/gorethink"
+	"github.com/coopernurse/gorp"
 	"github.com/gin-gonic/gin"
+	_ "github.com/mattn/go-sqlite3"
 	"gopkg.in/yaml.v2"
 )
 
@@ -17,17 +20,11 @@ type Configuration struct {
 	Web struct {
 		Port string
 	}
-	Database struct {
-		Host string
-		Port string
-		Name string
-	}
 }
 
 var (
-	config  Configuration
-	session *r.Session
-	err     error
+	config Configuration
+	err    error
 )
 
 func main() {
@@ -43,19 +40,31 @@ func main() {
 		log.Fatal(err)
 	}
 
-	session, err = r.Connect(r.ConnectOpts{
-		Address:  fmt.Sprintf("%v:%v", config.Database.Host, config.Database.Port),
-		Database: config.Database.Name,
-	})
+	db, err := sql.Open("sqlite3", "karousel.db")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
+
+	dbmap.AddTableWithName(models.Album{}, "albums").SetKeys(true, "Id")
+	dbmap.AddTableWithName(models.Collection{}, "collections").SetKeys(true, "Id")
+	dbmap.AddTableWithName(models.Photo{}, "photos").SetKeys(true, "Id")
+	dbmap.AddTableWithName(models.User{}, "users").SetKeys(true, "Id")
+
+	err = dbmap.CreateTablesIfNotExists()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer dbmap.Db.Close()
+
 	router := gin.Default()
 
 	router.Use(middleware.CORS())
-	router.Use(middleware.Database(session))
+	router.Use(middleware.Database(dbmap))
 
 	router.GET("/users/", handlers.GetUserResource)
 

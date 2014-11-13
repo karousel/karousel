@@ -5,11 +5,11 @@ import (
 )
 
 type User struct {
-	Id       string    `json:"id"`
-	Admin    bool      `json:"admin" gorethink:"admin"`
-	Username string    `json:"username" gorethink:"username"`
-	Password string    `json:"-" gorethink:"password"`
-	Email    string    `json:"email" gorethink:"email"`
-	Gravatar string    `json:"gravatar" gorethink:"gravatar"`
-	Joined   time.Time `json:"joined" gorethink:"joined"`
+	Id       int64     `json:"id" db:"id"`
+	Admin    bool      `json:"admin" db:"admin"`
+	Username string    `json:"username" db:"username"`
+	Password string    `json:"password,omitempty" db:"password"`
+	Email    string    `json:"email"  db:"email"`
+	Gravatar string    `json:"gravatar" db:"gravatar"`
+	Joined   time.Time `json:"joined" db:"joined"`
 }
