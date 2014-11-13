@@ -109,6 +109,10 @@ func GetUserResource(c *gin.Context) {
 
 	for index, _ := range users {
 		users[index].Password = ""
+		if users[index].Gravatar == "" {
+			users[index].Gravatar = users[index].Email
+		}
+		users[index].Email = ""
 	}
 
 	c.JSON(200, users)
