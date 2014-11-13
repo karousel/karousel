@@ -15,14 +15,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type Configuration struct {
-	Web struct {
-		Port string
-	}
-}
-
 var (
-	config Configuration
+	config models.Configuration
 	err    error
 )
 
@@ -50,6 +44,7 @@ func main() {
 
 	router.Use(middleware.CORS())
 	router.Use(middleware.Database(db))
+	router.Use(middleware.Configure(config))
 
 	router.POST("/tokens/", handlers.PostTokenResource)
 
