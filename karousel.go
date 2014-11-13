@@ -52,6 +52,7 @@ func main() {
 	router.Use(middleware.Database(db))
 
 	router.GET("/users/", handlers.GetUserResource)
+	router.POST("/users/", handlers.PostUserResource)
 
 	router.Run(fmt.Sprintf(":%v", config.Web.Port))
 }
