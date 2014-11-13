@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -10,8 +9,8 @@ import (
 	"github.com/citruspi/karousel/middleware"
 	"github.com/citruspi/karousel/models"
 
-	"github.com/coopernurse/gorp"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 	"gopkg.in/yaml.v2"
 )
@@ -40,31 +39,17 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db, err := sql.Open("sqlite3", "karousel.db")
+	db, err := gorm.Open("sqlite3", "karousel.db")
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	db.DB()
+	db.DB().Ping()
 
-	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
-
-	dbmap.AddTableWithName(models.Album{}, "albums").SetKeys(true, "Id")
-	dbmap.AddTableWithName(models.Collection{}, "collections").SetKeys(true, "Id")
-	dbmap.AddTableWithName(models.Photo{}, "photos").SetKeys(true, "Id")
-	dbmap.AddTableWithName(models.User{}, "users").SetKeys(true, "Id")
-
-	err = dbmap.CreateTablesIfNotExists()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer dbmap.Db.Close()
+	db.AutoMigrate(&models.User{}, &models.Photo{}, &models.Album{}, &models.Collection{})
 
 	router := gin.Default()
 
 	router.Use(middleware.CORS())
-	router.Use(middleware.Database(dbmap))
+	router.Use(middleware.Database(db))
 
 	router.GET("/users/", handlers.GetUserResource)
 

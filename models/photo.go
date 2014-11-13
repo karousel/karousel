@@ -5,8 +5,9 @@ import (
 )
 
 type Photo struct {
-	Id       int64             `json:"id" db:"id"`
-	Name     string            `json:"name" db:"name"`
-	Uploaded time.Time         `json:"uploaded" db:"uploaded"`
-	EXIF     map[string]string `json:"exif" db:"exif"`
+	Id         int64     `json:"id"`
+	AlbumId    int64     `json:"album_id"`
+	Name       string    `json:"name"`
+	Uploaded   time.Time `json:"uploaded"`
+	EXIFString string    `json:"-"`
 }

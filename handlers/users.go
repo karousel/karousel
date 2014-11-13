@@ -1,23 +1,17 @@
 package handlers
 
 import (
-	"log"
-
 	"github.com/citruspi/karousel/models"
 
-	"github.com/coopernurse/gorp"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
 
 func GetUserResource(c *gin.Context) {
-	db := c.MustGet("db").(*gorp.DbMap)
+	db := c.MustGet("db").(gorm.DB)
 
 	var users []models.User
-	_, err := db.Select(&users, "select * from users order by id")
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	db.Find(&users)
 
 	c.JSON(200, users)
 }

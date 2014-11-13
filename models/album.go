@@ -5,9 +5,10 @@ import (
 )
 
 type Album struct {
-	Id       int64     `json:"id" db:"id"`
-	Name     string    `json:"name" db:"name"`
-	Created  time.Time `json:"created" db:"created"`
-	Modified time.Time `json:"modified" db:"modified"`
-	Photos   []Photo   `json:"photos" db:"photos"`
+	Id           int64     `json:"id"`
+	CollectionId int64     `json:"collection_id"`
+	Name         string    `json:"name"`
+	Created      time.Time `json:"created"`
+	Modified     time.Time `json:"modified"`
+	Photos       []Photo   `json:"photos"`
 }
