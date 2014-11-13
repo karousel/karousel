@@ -12,6 +12,25 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+func GetUserInstance(c *gin.Context) {
+	db := c.MustGet("db").(gorm.DB)
+
+	id := c.Params.ByName("id")
+
+	var user models.User
+
+	db.First(&user, id)
+
+	if user.Username == "" {
+		response := make(map[string]string)
+		response["error"] = "Resource not found."
+		c.JSON(404, response)
+	} else {
+		user.Password = ""
+		c.JSON(200, user)
+	}
+}
+
 func PostUserResource(c *gin.Context) {
 	db := c.MustGet("db").(gorm.DB)
 
