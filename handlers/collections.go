@@ -50,3 +50,21 @@ func PostCollectionResource(c *gin.Context) {
 		}
 	}
 }
+
+func GetCollectionInstance(c *gin.Context) {
+	db := c.MustGet("db").(gorm.DB)
+
+	id := c.Params.ByName("id")
+
+	var collection models.Collection
+
+	db.First(&collection, id)
+
+	if collection.Name == "" {
+		response := make(map[string]string)
+		response["error"] = "Resource not found."
+		c.JSON(404, response)
+	} else {
+		c.JSON(200, collection)
+	}
+}
