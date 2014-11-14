@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/citruspi/karousel/models"
 
 	"github.com/gin-gonic/gin"
@@ -14,4 +17,53 @@ func GetAlbumResource(c *gin.Context) {
 	db.Find(&albums)
 
 	c.JSON(200, albums)
+}
+
+func PostAlbumResource(c *gin.Context) {
+	db := c.MustGet("db").(gorm.DB)
+
+	var album models.Album
+
+	c.Bind(&album)
+
+	if (album.Name == "") || (album.CollectionId == 0) {
+		response := make(map[string]string)
+		response["error"] = "Incomplete submission."
+		c.JSON(400, response)
+	} else {
+		var queryCollection models.Collection
+
+		db.First(&queryCollection, album.CollectionId)
+
+		if queryCollection.Name == "" {
+			response := make(map[string]string)
+			response["error"] = "Resource not found."
+			c.JSON(404, response)
+		} else {
+			var queryAlbums []models.Album
+			var duplicate bool
+
+			db.Where("name = ?", album.Name).Find(&queryAlbums)
+
+			for _, queryAlbum := range queryAlbums {
+				if queryAlbum.CollectionId == album.CollectionId {
+					duplicate = true
+					break
+				}
+			}
+
+			if duplicate {
+				response := make(map[string]string)
+				response["error"] = "Duplicate resource."
+				c.JSON(409, response)
+			} else {
+				album.Created = time.Now().UTC()
+				db.Create(&album)
+
+				locationHeader := fmt.Sprintf("/albums/%v", album.Id)
+
+				c.Writer.Header().Set("Location", locationHeader)
+			}
+		}
+	}
 }

@@ -59,6 +59,7 @@ func main() {
 	router.DELETE("/collections/:id/", middleware.Authenticate(), handlers.DeleteCollectionInstance)
 
 	router.GET("/albums/", middleware.Authenticate(), handlers.GetAlbumResource)
+	router.POST("/albums/", middleware.Authenticate(), handlers.PostAlbumResource)
 
 	router.Run(fmt.Sprintf(":%v", config.Web.Port))
 }
