@@ -53,15 +53,21 @@ func DeleteUserInstance(c *gin.Context) {
 		response["error"] = "Resource not found."
 		c.JSON(404, response)
 	} else {
-		db.Delete(&user)
-		if user.Id != consumer.Id {
-			if user.Gravatar == "" {
-				user.Gravatar = user.Email
+		if (consumer.Admin) || (user.Id == consumer.Id) {
+			db.Delete(&user)
+			if user.Id != consumer.Id {
+				if user.Gravatar == "" {
+					user.Gravatar = user.Email
+				}
+				user.Email = ""
 			}
-			user.Email = ""
+			user.Password = ""
+			c.JSON(200, user)
+		} else {
+			response := make(map[string]string)
+			response["error"] = "Invalid credentials."
+			c.JSON(401, response)
 		}
-		user.Password = ""
-		c.JSON(200, user)
 	}
 }
 
