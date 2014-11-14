@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/citruspi/karousel/models"
 
 	"github.com/gin-gonic/gin"
@@ -14,4 +17,36 @@ func GetCollectionResource(c *gin.Context) {
 	db.Find(&collections)
 
 	c.JSON(200, collections)
+}
+
+func PostCollectionResource(c *gin.Context) {
+	db := c.MustGet("db").(gorm.DB)
+
+	var collection models.Collection
+
+	c.Bind(&collection)
+
+	if collection.Name == "" {
+		response := make(map[string]string)
+		response["error"] = "Incomplete submission."
+		c.JSON(400, response)
+	} else {
+		var queryCollection models.Collection
+
+		db.Where("name = ?", collection.Name).First(&queryCollection)
+
+		if queryCollection.Name != "" {
+			response := make(map[string]string)
+			response["error"] = "Duplicate resource."
+			c.JSON(409, response)
+		} else {
+			collection.Created = time.Now().UTC()
+
+			db.Create(&collection)
+
+			locationHeader := fmt.Sprintf("/collections/%v", collection.Id)
+
+			c.Writer.Header().Set("Location", locationHeader)
+		}
+	}
 }
