@@ -14,6 +14,7 @@ import (
 
 func GetUserInstance(c *gin.Context) {
 	db := c.MustGet("db").(gorm.DB)
+	consumer := c.MustGet("consumer").(models.User)
 
 	id := c.Params.ByName("id")
 
@@ -26,6 +27,12 @@ func GetUserInstance(c *gin.Context) {
 		response["error"] = "Resource not found."
 		c.JSON(404, response)
 	} else {
+		if user.Id != consumer.Id {
+			if user.Gravatar == "" {
+				user.Gravatar = user.Email
+			}
+			user.Email = ""
+		}
 		user.Password = ""
 		c.JSON(200, user)
 	}
@@ -33,6 +40,7 @@ func GetUserInstance(c *gin.Context) {
 
 func DeleteUserInstance(c *gin.Context) {
 	db := c.MustGet("db").(gorm.DB)
+	consumer := c.MustGet("consumer").(models.User)
 
 	id := c.Params.ByName("id")
 
@@ -46,6 +54,12 @@ func DeleteUserInstance(c *gin.Context) {
 		c.JSON(404, response)
 	} else {
 		db.Delete(&user)
+		if user.Id != consumer.Id {
+			if user.Gravatar == "" {
+				user.Gravatar = user.Email
+			}
+			user.Email = ""
+		}
 		user.Password = ""
 		c.JSON(200, user)
 	}
