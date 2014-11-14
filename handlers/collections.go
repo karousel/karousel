@@ -16,6 +16,12 @@ func GetCollectionResource(c *gin.Context) {
 	var collections []models.Collection
 	db.Find(&collections)
 
+	for i, collection := range collections {
+		var albums []models.Album
+		db.Model(&collection).Related(&albums)
+		collections[i].Albums = albums
+	}
+
 	c.JSON(200, collections)
 }
 
@@ -65,6 +71,9 @@ func GetCollectionInstance(c *gin.Context) {
 		response["error"] = "Resource not found."
 		c.JSON(404, response)
 	} else {
+		var albums []models.Album
+		db.Model(&collection).Related(&albums)
+		collection.Albums = albums
 		c.JSON(200, collection)
 	}
 }
