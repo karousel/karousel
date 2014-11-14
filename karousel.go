@@ -47,21 +47,26 @@ func main() {
 	router.Use(middleware.Configure(config))
 
 	router.POST("/tokens/", handlers.PostTokenResource)
-
-	router.GET("/users/", middleware.Authenticate(), handlers.GetUserResource)
 	router.POST("/users/", handlers.PostUserResource)
-	router.GET("/users/:id/", middleware.Authenticate(), handlers.GetUserInstance)
-	router.DELETE("/users/:id/", middleware.Authenticate(), handlers.DeleteUserInstance)
 
-	router.GET("/collections/", middleware.Authenticate(), handlers.GetCollectionResource)
-	router.POST("/collections/", middleware.Authenticate(), handlers.PostCollectionResource)
-	router.GET("/collections/:id/", middleware.Authenticate(), handlers.GetCollectionInstance)
-	router.DELETE("/collections/:id/", middleware.Authenticate(), handlers.DeleteCollectionInstance)
+	authenticated := router.Group("/")
 
-	router.GET("/albums/", middleware.Authenticate(), handlers.GetAlbumResource)
-	router.POST("/albums/", middleware.Authenticate(), handlers.PostAlbumResource)
-	router.GET("/albums/:id/", middleware.Authenticate(), handlers.GetAlbumInstance)
-	router.DELETE("/albums/:id/", middleware.Authenticate(), handlers.DeleteAlbumInstance)
+	authenticated.Use(middleware.Authenticate())
+	{
+		authenticated.GET("/users/", handlers.GetUserResource)
+		authenticated.GET("/users/:id/", handlers.GetUserInstance)
+		authenticated.DELETE("/users/:id/", handlers.DeleteUserInstance)
+
+		authenticated.GET("/collections/", handlers.GetCollectionResource)
+		authenticated.POST("/collections/", handlers.PostCollectionResource)
+		authenticated.GET("/collections/:id/", handlers.GetCollectionInstance)
+		authenticated.DELETE("/collections/:id/", handlers.DeleteCollectionInstance)
+
+		authenticated.GET("/albums/", handlers.GetAlbumResource)
+		authenticated.POST("/albums/", handlers.PostAlbumResource)
+		authenticated.GET("/albums/:id/", handlers.GetAlbumInstance)
+		authenticated.DELETE("/albums/:id/", handlers.DeleteAlbumInstance)
+	}
 
 	router.Run(fmt.Sprintf(":%v", config.Web.Port))
 }
