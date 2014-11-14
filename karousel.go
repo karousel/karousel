@@ -56,6 +56,7 @@ func main() {
 	router.GET("/collections/", middleware.Authenticate(), handlers.GetCollectionResource)
 	router.POST("/collections/", middleware.Authenticate(), handlers.PostCollectionResource)
 	router.GET("/collections/:id/", middleware.Authenticate(), handlers.GetCollectionInstance)
+	router.DELETE("/collections/:id/", middleware.Authenticate(), handlers.DeleteCollectionInstance)
 
 	router.Run(fmt.Sprintf(":%v", config.Web.Port))
 }

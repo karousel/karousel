@@ -68,3 +68,29 @@ func GetCollectionInstance(c *gin.Context) {
 		c.JSON(200, collection)
 	}
 }
+
+func DeleteCollectionInstance(c *gin.Context) {
+	db := c.MustGet("db").(gorm.DB)
+	consumer := c.MustGet("consumer").(models.User)
+
+	id := c.Params.ByName("id")
+
+	var collection models.Collection
+
+	db.First(&collection, id)
+
+	if collection.Name == "" {
+		response := make(map[string]string)
+		response["error"] = "Resource not found."
+		c.JSON(404, response)
+	} else {
+		if consumer.Admin {
+			db.Delete(&collection)
+			c.JSON(200, collection)
+		} else {
+			response := make(map[string]string)
+			response["error"] = "Invalid credentials."
+			c.JSON(401, response)
+		}
+	}
+}
