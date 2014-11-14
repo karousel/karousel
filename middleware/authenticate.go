@@ -12,9 +12,12 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+var config models.Configuration
+
 func Authenticate() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := c.MustGet("db").(gorm.DB)
+		config = c.MustGet("config").(models.Configuration)
 
 		tokenString := c.Request.Header.Get("X-Authentication-Token")
 
@@ -70,7 +73,7 @@ func Authenticate() gin.HandlerFunc {
 }
 
 func verify(*jwt.Token) (interface{}, error) {
-	key, err := ioutil.ReadFile("key.pub")
+	key, err := ioutil.ReadFile(config.Keys.Public)
 
 	if err != nil {
 		log.Fatal(err)

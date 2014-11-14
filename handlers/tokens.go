@@ -15,6 +15,7 @@ import (
 
 func PostTokenResource(c *gin.Context) {
 	db := c.MustGet("db").(gorm.DB)
+	config := c.MustGet("config").(models.Configuration)
 
 	var user models.User
 
@@ -41,7 +42,7 @@ func PostTokenResource(c *gin.Context) {
 				response["error"] = "Invalid credentials."
 				c.JSON(401, response)
 			} else {
-				key, err := ioutil.ReadFile("key")
+				key, err := ioutil.ReadFile(config.Keys.Private)
 
 				if err != nil {
 					log.Fatal(err)
