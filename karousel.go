@@ -66,6 +66,8 @@ func main() {
 		authenticated.POST("/albums/", handlers.PostAlbumResource)
 		authenticated.GET("/albums/:id/", handlers.GetAlbumInstance)
 		authenticated.DELETE("/albums/:id/", handlers.DeleteAlbumInstance)
+
+		authenticated.GET("/photos/", handlers.GetPhotoResource)
 	}
 
 	router.Run(fmt.Sprintf(":%v", config.Web.Port))
