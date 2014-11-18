@@ -71,9 +71,7 @@ func GetCollectionInstance(c *gin.Context) {
 		response["error"] = "Resource not found."
 		c.JSON(404, response)
 	} else {
-		var albums []models.Album
-		db.Model(&collection).Related(&albums)
-		collection.Albums = albums
+		db.Model(&collection).Related(&collection.Albums)
 		c.JSON(200, collection)
 	}
 }
