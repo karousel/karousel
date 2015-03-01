@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/citruspi/karousel/models"
+	"github.com/karousel/karousel/models"
 
 	"github.com/gin-gonic/gin"
 )

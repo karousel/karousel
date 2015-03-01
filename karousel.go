@@ -5,9 +5,9 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/citruspi/karousel/handlers"
-	"github.com/citruspi/karousel/middleware"
-	"github.com/citruspi/karousel/models"
+	"github.com/karousel/karousel/handlers"
+	"github.com/karousel/karousel/middleware"
+	"github.com/karousel/karousel/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"

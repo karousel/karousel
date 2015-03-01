@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/citruspi/karousel/models"
+	"github.com/karousel/karousel/models"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"

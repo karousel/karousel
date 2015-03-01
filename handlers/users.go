@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/citruspi/karousel/models"
+	"github.com/karousel/karousel/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
